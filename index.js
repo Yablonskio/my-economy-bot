@@ -1,5 +1,6 @@
 import Commands from "./Commands.js";
 import { Client, GatewayIntentBits } from 'discord.js'
+import logicBuy from "./logicShop.js";
 
 const client = new Client({
 	intents: [
@@ -21,13 +22,14 @@ const dataCommand = {
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
-	client.user.setStatus('Мой префикс: q')
+	client.user.setActivity('Мой префикс: q')
 })
 client.on('messageCreate', msg => {
 	if (msg.author.bot || !msg.content.toLowerCase().startsWith(PREFIX))
 		return
 
 	let cmd = msg.content.split(' ')[0].slice(PREFIX.length).toLowerCase()
+
 
 	Commands(cmd, msg, dataCommand)
 
@@ -36,4 +38,4 @@ client.on('messageCreate', msg => {
 
 
 
-client.login(TOKEN);
+client.login('OTQxMDM0MzE1MTg4NDM3MDUz.GoFbwm.8TWcaSMKK5hPuxfIiH50qWDGthI-5HHBYAxecM');

@@ -3,6 +3,8 @@ import fs from 'fs'
 import callLogicCmd from './logic.js'
 import logicBuy from "./logicShop.js";
 import {foundAuthor, addNewUser} from './BasicComponents.js'
+import pay from './pay.js'
+import bal from './bal.js'
 
 function Commands(command, msg, dataCommand) {
 	switch (command) {
@@ -21,24 +23,7 @@ function Commands(command, msg, dataCommand) {
 			callLogicCmd(5, msg, dataCommand)
 			break;
 		case 'bal':
-			fs.readFile('dataUser.json', function (err, data) {
-				let dataWrite = JSON.parse(data)
-				let userID = foundAuthor(msg, dataWrite)
-				if (userID === false) addNewUser(msg, dataWrite)
-				if (err) console.log(err)
-				else {
-					if (userID === undefined) {
-						dataWrite.push(addNewUser)
-						fs.writeFile('dataUser.json', JSON.stringify(dataWrite),
-							(err) => err && console.error(err))
-						msg.channel.send('Добро пожаловать! Ваш начальный баланс: 500')
-						//msg.channel.send('У вас еще нету баланса или мы не нашли ваш кошелек')
-						return true
-					}
-					msg.channel.send('Ваш баланс: ' + dataWrite[userID].money)
-					fs.writeFile('dataUser.json', JSON.stringify(dataWrite),
-						(err) => err && console.error(err))
-				}})
+			bal(msg)
 			break;
 		case 'shop':
 			const shopEmbed = new EmbedBuilder()
@@ -70,17 +55,21 @@ function Commands(command, msg, dataCommand) {
 		case 'help':
 			const helpEmbed = new EmbedBuilder()
 				.setColor(0x0099FF)
-				.setAuthor({ name: 'Помощь'})
+				.setAuthor({ name: 'Помощь | Команды бота'})
 				.addFields(
 					{ name: 'Qwork', value: 'Команда для заработка в средем дает 120💵 раз в 30 секунд' },
 					{ name: 'Qact', value: 'Команда для заработка в средем дает 220💵 раз в 1 минуту' },
 					{ name: 'Qcrime', value: 'Команда для заработка в средем дает 500💵 раз в 1 час' },
-					{ name: 'Qbal', value: 'Команда для того что-бы узнать свой баланс' },
+					{ name: 'Qbal или Qbal <пинг игрока>', value: 'Команда для того что-бы узнать баланс' },
 					{ name: 'Qshop', value: 'Команда просмотра магазина' },
-					{ name: 'Qbuy', value: 'Команда для покупки товара в магазине' },
+					{ name: 'Qbuy <название предмета>', value: 'Команда для покупки товара в магазине' },
 					{ name: 'Qcalm', value: 'Команда для сбора денег, за предметы из магазина' },
+					{ name: 'Qpay <пинг игрока> <сума денег>', value: 'Команда для перевода денег на другой счет, налог 5%' },
 				)
 			msg.reply({ embeds: [helpEmbed]})
+			break;
+		case 'pay':
+			pay(msg)
 			break;
 		default:
 			console.log('Error in command switch')

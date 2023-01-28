@@ -13,10 +13,10 @@ function addNewUser(msg, dataWrite) {
 	return dataWrite
 }
 
-function foundAuthor(msg, dataWrite) {
+function foundAuthor(member, dataWrite) {
 	for (let i = 0; i < dataWrite.length; i++) {
-		if (msg.author.id === dataWrite[i].id) {
-			return i
+		if (member === dataWrite[i].id) {
+			return dataWrite[i]
 		}
 	}
 	return false
