@@ -38,4 +38,4 @@ client.on('messageCreate', msg => {
 
 
 
-client.login('OTQxMDM0MzE1MTg4NDM3MDUz.GoFbwm.8TWcaSMKK5hPuxfIiH50qWDGthI-5HHBYAxecM');
+client.login(TOKEN);
