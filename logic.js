@@ -1,5 +1,9 @@
 // 1 - work; 2 - act; 3 - crime; 4 - hour money; 5 - day money;
 import fs from "fs";
+import { EmbedBuilder } from 'discord.js'
+
+
+
 import {foundAuthor, addNewUser} from './BasicComponents.js'
 function logicCmd(msg, data, dataCmd, type) {
 	let dateNow = new Date().getTime()
@@ -41,21 +45,27 @@ function logicCmd(msg, data, dataCmd, type) {
 	if (paymentCmd === 0) return true
 	let dateLater = dateNow - cooldown
 	if (dateLater >= cooldownCmd || cooldown === 0) {
+		let name
 		switch (type) {
 			case 1:
 				data.cooldownW = dateNow
+				name = 'Work'
 				break;
 			case 2:
 				data.cooldownA = dateNow
+				name = 'Act'
 				break;
 			case 3:
 				data.cooldownC = dateNow
+				name = 'Crime'
 				break;
 			case 4:
 				data.hourMoney.cooldown = dateNow
+				name = 'Calm'
 				break;
 			case 5:
 				data.dayMoney.cooldown = dateNow
+				name = 'Calm'
 				break;
 			default:
 				console.log('Error in switch!')
@@ -64,9 +74,13 @@ function logicCmd(msg, data, dataCmd, type) {
 			Math.floor(Math.random() * paymentCmd / 100 * percentCmd)
 		let moneyEarn = paymentCmd + rundomMoney
 		data.money = data.money + moneyEarn
-
-		msg.channel.send(`Вы заработали: ${moneyEarn}, 
-		\nвсего: (${data.money})`)
+		let workEmbed = new EmbedBuilder()
+			.setColor(0x66de86)
+			.setTitle('Вы заработали: +' + moneyEarn)
+			.setAuthor({ name: name, iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1064307830510854144/plus.png'})
+			.setDescription('На балансе теперь: ' + data.money)
+			.setFooter({ text: msg.author.tag, iconURL: msg.author.avatarURL() })
+		msg.channel.send({ embeds: [workEmbed]})
 	} else {
 		let cooldownText = cooldownCmd - dateLater
 		cooldownText = (cooldownText-(cooldownText%1000))/1000
@@ -76,7 +90,7 @@ function logicCmd(msg, data, dataCmd, type) {
 			msg.channel.send(`Отдых, еще осталось: ${cooldownSec} сек`)
 			return true
 		}
-		cooldownSec = Math.floor(cooldownSec / 60 * cooldownText)
+		cooldownSec = Math.floor(cooldownSec % 60)
 		msg.channel.send(`Отдых, еще осталось: ${cooldownText} мин и ${cooldownSec} сек`)
 	}
 }
@@ -101,4 +115,6 @@ async function callLogicCmd(type, msg, dataCommand) {
 		}
 	})
 }
+/*`Вы заработали: ${moneyEarn},
+		\nвсего: (${data.money})`*/
 export default callLogicCmd
