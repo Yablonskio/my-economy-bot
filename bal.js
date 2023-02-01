@@ -1,5 +1,7 @@
 import fs from "fs";
 import {addNewUser, foundAuthor} from "./BasicComponents.js";
+import {EmbedBuilder} from "discord.js";
+import client from './index.js'
 
 async function bal(msg) {
 	await fs.readFile('dataUser.json',
@@ -12,11 +14,27 @@ async function bal(msg) {
 				if (err) console.log(err)
 				else {
 					if (msg.content.split(' ')[1] === undefined) {
-						msg.channel.send('Ваш баланс: ' + member.money)
+						let balEmbed = new EmbedBuilder()
+							.setColor(0xf09656)
+							.setTitle('На вашем балансе:  ' + member.money + ' 💸')
+							.setAuthor({ name: msg.author.tag, iconURL: msg.author.avatarURL()})
+							.setDescription('Доп. 💵 каждый час: ' + member.hourMoney.amount)
+							.setFooter({ text: 'Balance', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070038260316901467/okey.png' })
+							.setTimestamp()
+						msg.channel.send({ embeds: [balEmbed]})
 					} else {
 						let anotherWallet = msg.content.split(' ')[1].substring(2).slice(0, -1)
 						anotherWallet = foundAuthor(anotherWallet, dataWrite)
-						msg.channel.send('Его баланс: ' + anotherWallet.money)
+						let anotherNick = client.users.cache.get(anotherWallet.id).tag
+						let anotherAvatar = client.users.cache.get(anotherWallet.id).avatarURL()
+						let balEmbed = new EmbedBuilder()
+							.setColor(0xf09656)
+							.setTitle('На его балансе:  ' + anotherWallet.money + ' 💸')
+							.setAuthor({ name: anotherNick, iconURL: anotherAvatar})
+							.setDescription('Доп. 💵 каждый час: ' + anotherWallet.hourMoney.amount)
+							.setFooter({ text: 'Balance', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070038260316901467/okey.png' })
+							.setTimestamp()
+						msg.channel.send({ embeds: [balEmbed]})
 					}
 				}
 			}

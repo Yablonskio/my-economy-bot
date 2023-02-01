@@ -10,10 +10,11 @@ const client = new Client({
 		GatewayIntentBits.GuildMembers
 	]
 })
+export default client
 
 const PREFIX = 'q'
 let guild = client.guilds.cache.get('1061299852341936138')
-export default guild
+export {guild, client}
 const dataCommand = {
 	work: {cooldown: 30000, payment: 100, percent: 30},
 	act: {cooldown: 60000, payment: 170, percent: 60},
