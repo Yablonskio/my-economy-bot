@@ -1,8 +1,8 @@
-import Commands from "./Commands.js";
+import Commands from "./main/Commands.js";
 import { Client, GatewayIntentBits } from 'discord.js'
-import logicBuy from "./logicShop.js";
+import logicBuy from "./logic/logicShop.js";
 
-const client = new Client({
+export const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,
@@ -13,8 +13,9 @@ const client = new Client({
 export default client
 
 const PREFIX = 'q'
-let guild = client.guilds.cache.get('1061299852341936138')
-export {guild, client}
+
+
+
 const dataCommand = {
 	work: {cooldown: 30000, payment: 100, percent: 30},
 	act: {cooldown: 60000, payment: 170, percent: 60},

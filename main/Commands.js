@@ -1,10 +1,11 @@
 import { EmbedBuilder, AttachmentBuilder } from 'discord.js'
 import fs from 'fs'
-import callLogicCmd from './logic.js'
-import logicBuy from "./logicShop.js";
+import callLogicCmd from '../logic/logic.js'
+import logicBuy from "../logic/logicShop.js";
 import {foundAuthor, addNewUser} from './BasicComponents.js'
-import pay from './pay.js'
-import bal from './bal.js'
+import pay from '../commands/pay.js'
+import bal from '../commands/bal.js'
+import top from '../commands/top.js'
 
 function Commands(command, msg, dataCommand) {
 	switch (command) {
@@ -23,6 +24,9 @@ function Commands(command, msg, dataCommand) {
 			callLogicCmd(5, msg, dataCommand)
 			break;
 		case 'bal':
+			bal(msg)
+			break;
+		case 'balance':
 			bal(msg)
 			break;
 		case 'shop':
@@ -70,6 +74,9 @@ function Commands(command, msg, dataCommand) {
 			break;
 		case 'pay':
 			pay(msg)
+			break;
+		case 'top':
+			top(msg)
 			break;
 		default:
 			console.log('Error in command switch')

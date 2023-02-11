@@ -1,7 +1,7 @@
 import fs from "fs";
-import {addNewUser, foundAuthor} from "./BasicComponents.js";
+import {addNewUser, foundAuthor} from "../main/BasicComponents.js";
 import {EmbedBuilder} from "discord.js";
-import client from './index.js'
+import client from '../index.js'
 
 async function bal(msg) {
 	await fs.readFile('dataUser.json',
@@ -16,7 +16,7 @@ async function bal(msg) {
 					if (msg.content.split(' ')[1] === undefined) {
 						let balEmbed = new EmbedBuilder()
 							.setColor(0xf09656)
-							.setTitle('На вашем балансе:  ' + member.money + ' 💸')
+							.setTitle('На вашем балансе: ' + member.money + ' 💸')
 							.setAuthor({ name: msg.author.tag, iconURL: msg.author.avatarURL()})
 							.setDescription('Доп. 💵 каждый час: ' + member.hourMoney.amount)
 							.setFooter({ text: 'Balance', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070038260316901467/okey.png' })

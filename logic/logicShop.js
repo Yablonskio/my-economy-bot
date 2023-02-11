@@ -1,6 +1,6 @@
 import fs from "fs";
-import {addNewUser, foundAuthor} from "./BasicComponents.js";
-import guild from "./index.js";
+import {addNewUser, foundAuthor} from "../main/BasicComponents.js";
+import guild from "../index.js";
 
 async function logicBuy(msg) {
 	const roleBuy = msg.content.substring(5) || 'error'
@@ -15,7 +15,8 @@ async function logicBuy(msg) {
 				return
 			}
 			switch (roleBuy.toLowerCase()) {
-				case 'шахтер 3':
+				// Написать существующие ID ролей
+				/*case 'шахтер 3':
 					if (dataWrite[userID].hourMoney.amount === 1000 &&
 						dataWrite[userID].money >= 20000) {
 						dataWrite[userID].money -= 20000
@@ -49,7 +50,7 @@ async function logicBuy(msg) {
 					} else {
 						msg.reply('Покупка данной роли не возможна потому-что вы уже купили роль старше')
 					}
-					break;
+					break;*/
 
 				case 'error':
 					msg.channel.send('Вы не правильно написали команду\n \"Qhelp\" – для помощи по боту')

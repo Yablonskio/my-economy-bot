@@ -4,7 +4,7 @@ import { EmbedBuilder } from 'discord.js'
 
 
 
-import {foundAuthor, addNewUser} from './BasicComponents.js'
+import {foundAuthor, addNewUser} from '../main/BasicComponents.js'
 function logicCmd(msg, data, dataCmd, type) {
 	let dateNow = new Date().getTime()
 	let cooldown, cooldownCmd, paymentCmd, percentCmd
@@ -76,9 +76,9 @@ function logicCmd(msg, data, dataCmd, type) {
 		data.money = data.money + moneyEarn
 		let workEmbed = new EmbedBuilder()
 			.setColor(0x66de86)
-			.setTitle('Вы заработали: +' + moneyEarn)
+			.setTitle('Вы заработали: +' + moneyEarn + '💸')
 			.setAuthor({ name: name, iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1064307830510854144/plus.png'})
-			.setDescription('На балансе теперь: ' + data.money)
+			.setDescription('На балансе теперь: **' + data.money + '**💵')
 			.setFooter({ text: msg.author.tag, iconURL: msg.author.avatarURL() })
 		msg.channel.send({ embeds: [workEmbed]})
 	} else {
