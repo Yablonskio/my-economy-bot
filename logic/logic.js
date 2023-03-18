@@ -2,8 +2,6 @@
 import fs from "fs";
 import { EmbedBuilder } from 'discord.js'
 
-
-
 import {foundAuthor, addNewUser} from '../main/BasicComponents.js'
 function logicCmd(msg, data, dataCmd, type) {
 	let dateNow = new Date().getTime()
@@ -42,9 +40,8 @@ function logicCmd(msg, data, dataCmd, type) {
 		default:
 			console.log('Error in switch!')
 	}
-	if (paymentCmd === 0) return true
-	let dateLater = dateNow - cooldown
-	if (dateLater >= cooldownCmd || cooldown === 0) {
+	if (paymentCmd === 0) return
+	if (dateNow - cooldown >= cooldownCmd || cooldown === 0) {
 		let name
 		switch (type) {
 			case 1:
@@ -86,12 +83,18 @@ function logicCmd(msg, data, dataCmd, type) {
 		cooldownText = (cooldownText-(cooldownText%1000))/1000
 		let cooldownSec = cooldownText
 		cooldownText = Math.floor(cooldownText / 60)
+		let restEmbed = new EmbedBuilder()
+			.setColor(0xe8c96b)
+			.setTitle(`Отдых, еще осталось: ${cooldownSec} сек`)
+			.setAuthor({ name: 'Отдых', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1086679571690176646/palma.png'})
+			.setFooter({ text: msg.author.tag, iconURL: msg.author.avatarURL() })
+			.setTimestamp()
 		if (cooldownText === 0) {
-			msg.channel.send(`Отдых, еще осталось: ${cooldownSec} сек`)
-			return true
+			msg.channel.send({ embeds: [restEmbed]})
+			return
 		}
 		cooldownSec = Math.floor(cooldownSec % 60)
-		msg.channel.send(`Отдых, еще осталось: ${cooldownText} мин и ${cooldownSec} сек`)
+		msg.channel.send({ embeds: [restEmbed.setTitle(`Отдых, еще осталось: ${cooldownText} мин и ${cooldownSec} сек`)]})
 	}
 }
 
@@ -103,18 +106,14 @@ async function callLogicCmd(type, msg, dataCommand) {
 			addNewUser(msg, dataWrite)
 		} else {
 			if (err) console.log(err)
-			else {
-				logicCmd(msg, member, dataCommand, type)
-			}
+			else logicCmd(msg, member, dataCommand, type)
 		}
 		if (dataWrite !== Object) {
 			fs.writeFile('dataUser.json', JSON.stringify(dataWrite),
 				(err) => err && console.error(err))
-		} else {
-			console.log('CRITICAL ERROR!!!')
-		}
+		} else console.log('CRITICAL ERROR!!!')
+
 	})
 }
-/*`Вы заработали: ${moneyEarn},
-		\nвсего: (${data.money})`*/
+
 export default callLogicCmd

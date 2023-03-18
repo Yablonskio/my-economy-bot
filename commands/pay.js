@@ -1,7 +1,6 @@
 import fs from "fs";
 import {addNewUser, foundAuthor} from "../main/BasicComponents.js";
 import {EmbedBuilder} from "discord.js";
-import guild from "../index.js";
 import client from "../index.js";
 
 async function pay(msg) {
@@ -38,24 +37,23 @@ function payWorker(msg, dataWrite, member) {
 	} catch {
 		payErrorEmbed.setDescription('Не удалось найти такой кошелек , возможно пользователь еще его не создал')
 		msg.channel.send({ embeds: [payErrorEmbed]})
-		return false
+		return
 	}
 	let walletTransWorker = msg.content.split(' ')[1].substring(2).slice(0, -1)
 	let walletTrans = foundAuthor(walletTransWorker, dataWrite)
 	let amountTrans = msg.content.split(' ')[2]
-
 	if (walletTrans === false) {
 		payErrorEmbed.setDescription('Не удалось найти такой кошелек , возможно пользователь еще его не создал')
 		msg.channel.send({ embeds: [payErrorEmbed]})
-		return true
+		return
 	} else if (amountTrans % 1 !== 0) {
 		payErrorEmbed.setDescription('Можно переводить лишь целые числа')
 		msg.channel.send({ embeds: [payErrorEmbed]})
-		return true
+		return
 	} else if (member.money <= amountTrans) {
 		payErrorEmbed.setDescription('У вас не достаточно денег для операции 💸')
 		msg.channel.send({ embeds: [payErrorEmbed]})
-		return true
+		return
 	}
 	let walletTransNick = client.users.cache.get(walletTrans.id).tag
 	let walletTransAvatar = client.users.cache.get(walletTrans.id).avatarURL()

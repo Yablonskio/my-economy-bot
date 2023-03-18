@@ -23,18 +23,28 @@ async function bal(msg) {
 							.setTimestamp()
 						msg.channel.send({ embeds: [balEmbed]})
 					} else {
-						let anotherWallet = msg.content.split(' ')[1].substring(2).slice(0, -1)
-						anotherWallet = foundAuthor(anotherWallet, dataWrite)
-						let anotherNick = client.users.cache.get(anotherWallet.id).tag
-						let anotherAvatar = client.users.cache.get(anotherWallet.id).avatarURL()
-						let balEmbed = new EmbedBuilder()
-							.setColor(0xf09656)
-							.setTitle('На его балансе:  ' + anotherWallet.money + ' 💸')
-							.setAuthor({ name: anotherNick, iconURL: anotherAvatar})
-							.setDescription('Доп. 💵 каждый час: ' + anotherWallet.hourMoney.amount)
-							.setFooter({ text: 'Balance', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070038260316901467/okey.png' })
-							.setTimestamp()
-						msg.channel.send({ embeds: [balEmbed]})
+						try {
+							let anotherWallet = msg.content.split(' ')[1].substring(2).slice(0, -1)
+							anotherWallet = foundAuthor(anotherWallet, dataWrite)
+							let anotherNick = client.users.cache.get(anotherWallet.id).tag
+							let anotherAvatar = client.users.cache.get(anotherWallet.id).avatarURL()
+
+							let balEmbed = new EmbedBuilder()
+								.setColor(0xf09656)
+								.setTitle('На его балансе:  ' + anotherWallet.money + ' 💸')
+								.setAuthor({ name: anotherNick, iconURL: anotherAvatar})
+								.setDescription('Доп. 💵 каждый час: ' + anotherWallet.hourMoney.amount)
+								.setFooter({ text: 'Balance', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070038260316901467/okey.png' })
+								.setTimestamp()
+							msg.channel.send({ embeds: [balEmbed]})
+						} catch {
+							let balErrEmbed = new EmbedBuilder()
+								.setColor(0xeb4034)
+								.setTitle('Ошибка, такого кошелька еще не существует :(')
+								.setFooter({ text: 'Balance', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070038260316901467/okey.png' })
+								.setTimestamp()
+							msg.channel.send({ embeds: [balErrEmbed]})
+						}
 					}
 				}
 			}
