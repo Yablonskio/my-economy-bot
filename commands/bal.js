@@ -18,7 +18,8 @@ async function bal(msg) {
 							.setColor(0xf09656)
 							.setTitle('На вашем балансе: ' + member.money + ' 💸')
 							.setAuthor({ name: msg.author.tag, iconURL: msg.author.avatarURL()})
-							.setDescription('Доп. 💵 каждый час: ' + member.hourMoney.amount)
+							.setDescription('Доп. 💵 каждый час: ' + member.cooldown[3].amount +
+								'\nДоп. 💵 каждый день: ' + member.cooldown[4].amount)
 							.setFooter({ text: 'Balance', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070038260316901467/okey.png' })
 							.setTimestamp()
 						msg.channel.send({ embeds: [balEmbed]})
@@ -33,7 +34,8 @@ async function bal(msg) {
 								.setColor(0xf09656)
 								.setTitle('На его балансе:  ' + anotherWallet.money + ' 💸')
 								.setAuthor({ name: anotherNick, iconURL: anotherAvatar})
-								.setDescription('Доп. 💵 каждый час: ' + anotherWallet.hourMoney.amount)
+								.setDescription('Доп. 💵 каждый час: ' + anotherWallet.cooldown[3].amount +
+								'\nДоп. 💵 каждый день: ' + anotherWallet.cooldown[4].amount)
 								.setFooter({ text: 'Balance', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070038260316901467/okey.png' })
 								.setTimestamp()
 							msg.channel.send({ embeds: [balEmbed]})

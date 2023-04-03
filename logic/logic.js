@@ -1,76 +1,52 @@
 // 1 - work; 2 - act; 3 - crime; 4 - hour money; 5 - day money;
 import fs from "fs";
 import { EmbedBuilder } from 'discord.js'
-
+import {dataCommand as dataCmd} from "../index.js";
 import {foundAuthor, addNewUser} from '../main/BasicComponents.js'
-function logicCmd(msg, data, dataCmd, type) {
+import Commands from "../main/Commands.js";
+function logicCmd(msg, data, type) {
 	let dateNow = new Date().getTime()
-	let cooldown, cooldownCmd, paymentCmd, percentCmd
-	switch (type) {
-		case 1:
-			cooldown = data.cooldownW
-			cooldownCmd = dataCmd.work.cooldown
-			paymentCmd = dataCmd.work.payment
-			percentCmd = dataCmd.work.percent
-			break;
-		case 2:
-			cooldown = data.cooldownA
-			cooldownCmd = dataCmd.act.cooldown
-			paymentCmd = dataCmd.act.payment
-			percentCmd = dataCmd.act.percent
-			break;
-		case 3:
-			cooldown = data.cooldownC
-			cooldownCmd = dataCmd.crime.cooldown
-			paymentCmd = dataCmd.crime.payment
-			percentCmd = dataCmd.crime.percent
-			break;
-		case 4:
-			cooldown = data.hourMoney.cooldown
-			cooldownCmd = 3600000
-			paymentCmd = data.hourMoney.amount
-			percentCmd = 0
-			break;
-		case 5:
-			cooldown = data.dayMoney.cooldown
-			cooldownCmd = 86400000
-			paymentCmd = data.dayMoney.amount
-			percentCmd = 0
-			break;
-		default:
-			console.log('Error in switch!')
-	}
+	let cooldown, paymentCmd
+	let cooldownCmd = dataCmd[type].cooldown
+	let percentCmd = dataCmd[type].percent
+	let percentDouble = dataCmd[type].percentDouble
+	cooldown = data.cooldown[type]
+	paymentCmd = dataCmd[type].payment
+	//try {
+		if (type === 4) {
+			cooldown = data[type].cooldown
+			paymentCmd = data[type].amount
+		} else if (type === 5) {
+			cooldown = data[type].cooldown
+			paymentCmd = data[type].amount
+		} else {
+			cooldown = data.cooldown[type]
+			paymentCmd = dataCmd[type].payment
+		}
+	/*} catch (e) {
+		let workErrorEmbed = new EmbedBuilder()
+			.setColor(0xeb4034)
+			.setTitle('У вас нету стороннего заработка')
+			.setAuthor({ name: 'Calm', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070042361863868628/okey3.png'})
+			.setDescription('Команда не доступна')
+			.setFooter({ text: msg.author.tag, iconURL: msg.author.avatarURL() })
+		msg.channel.send({ embeds: [workErrorEmbed]})
+		return
+	}*/
 	if (paymentCmd === 0) return
 	if (dateNow - cooldown >= cooldownCmd || cooldown === 0) {
-		let name
-		switch (type) {
-			case 1:
-				data.cooldownW = dateNow
-				name = 'Work'
-				break;
-			case 2:
-				data.cooldownA = dateNow
-				name = 'Act'
-				break;
-			case 3:
-				data.cooldownC = dateNow
-				name = 'Crime'
-				break;
-			case 4:
-				data.hourMoney.cooldown = dateNow
-				name = 'Calm'
-				break;
-			case 5:
-				data.dayMoney.cooldown = dateNow
-				name = 'Calm'
-				break;
-			default:
-				console.log('Error in switch!')
-		}
+		let name = dataCmd[type].name
+		data.cooldown[type] = dateNow
 		let rundomMoney =
 			Math.floor(Math.random() * paymentCmd / 100 * percentCmd)
+
+		if (Math.ceil(Math.random() * 100/5)*5 < percentCmd &&
+		percentDouble !== 0) {
+			rundomMoney *= 2
+		}
 		let moneyEarn = paymentCmd + rundomMoney
 		data.money = data.money + moneyEarn
+
 		let workEmbed = new EmbedBuilder()
 			.setColor(0x66de86)
 			.setTitle('Вы заработали: +' + moneyEarn + '💸')
@@ -79,7 +55,7 @@ function logicCmd(msg, data, dataCmd, type) {
 			.setFooter({ text: msg.author.tag, iconURL: msg.author.avatarURL() })
 		msg.channel.send({ embeds: [workEmbed]})
 	} else {
-		let cooldownText = cooldownCmd - dateLater
+		let cooldownText = cooldownCmd - (dateNow - cooldown)
 		cooldownText = (cooldownText-(cooldownText%1000))/1000
 		let cooldownSec = cooldownText
 		cooldownText = Math.floor(cooldownText / 60)
@@ -98,7 +74,7 @@ function logicCmd(msg, data, dataCmd, type) {
 	}
 }
 
-async function callLogicCmd(type, msg, dataCommand) {
+async function callLogicCmd(type, msg) {
 	await fs.readFile('dataUser.json', function (err, data) {
 		let dataWrite = JSON.parse(data)
 		let member = foundAuthor(msg.author.id, dataWrite)
@@ -106,7 +82,7 @@ async function callLogicCmd(type, msg, dataCommand) {
 			addNewUser(msg, dataWrite)
 		} else {
 			if (err) console.log(err)
-			else logicCmd(msg, member, dataCommand, type)
+			else logicCmd(msg, member, type)
 		}
 		if (dataWrite !== Object) {
 			fs.writeFile('dataUser.json', JSON.stringify(dataWrite),

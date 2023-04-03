@@ -1,35 +1,48 @@
-import { EmbedBuilder, AttachmentBuilder } from 'discord.js'
-import fs from 'fs'
+import { EmbedBuilder} from 'discord.js'
 import callLogicCmd from '../logic/logic.js'
 import logicBuy from "../logic/logicShop.js";
-import {foundAuthor, addNewUser} from './BasicComponents.js'
 import pay from '../commands/pay.js'
 import bal from '../commands/bal.js'
 import top from '../commands/top.js'
+import cas from '../commands/cas.js'
 
-function Commands(command, msg, dataCommand) {
+function Commands(command, msg) {
 	switch (command) {
+
 		case 'work':
-			callLogicCmd(1, msg, dataCommand)
+		case 'цщкл':
+		case 'роб':
+			void callLogicCmd(0, msg)
 			break;
+
 		case 'act':
-			callLogicCmd(2, msg, dataCommand)
+		case 'фсе':
+		case 'дей':
+			void callLogicCmd(1, msg)
 			break;
+
 		case 'crime':
-			callLogicCmd(3, msg, dataCommand)
+		case 'скшьу':
+		case 'краж':
+			void callLogicCmd(2, msg)
 			break;
-		// DEV
+
 		case 'calm':
-			callLogicCmd(4, msg, dataCommand)
-			callLogicCmd(5, msg, dataCommand)
+		case 'сфдь':
+		case 'соб':
+			void callLogicCmd(3, msg)
+			void callLogicCmd(4, msg)
 			break;
+
 		case 'bal':
-			bal(msg)
+		case 'ифд':
+		case 'бал':
+			void bal(msg)
 			break;
-		case 'balance':
-			bal(msg)
-			break;
+
 		case 'shop':
+		case 'ырщз':
+		case 'маг':
 			const shopEmbed = new EmbedBuilder()
 				.setColor(0x0099FF)
 				.setAuthor({ name: 'Магазин',
@@ -53,30 +66,51 @@ function Commands(command, msg, dataCommand) {
 				//.setFooter({ text: msg.author.tag, iconURL: msg.author.avatarURL() });
 			msg.reply({ embeds: [shopEmbed]})
 			break;
+
 		case 'buy':
-			logicBuy(msg)
+		case 'игн':
+		case 'куп':
+			void logicBuy(msg)
 			break;
+
 		case 'help':
+		case 'рудз':
+		case 'помощь':
 			const helpEmbed = new EmbedBuilder()
 				.setColor(0x0099FF)
 				.setAuthor({ name: 'Помощь | Команды бота'})
 				.addFields(
-					{ name: 'Qwork', value: 'Команда для заработка в средем дает 120💵 раз в 30 секунд' },
-					{ name: 'Qact', value: 'Команда для заработка в средем дает 220💵 раз в 1 минуту' },
-					{ name: 'Qcrime', value: 'Команда для заработка в средем дает 500💵 раз в 1 час' },
-					{ name: 'Qbal или Qbal <пинг игрока>', value: 'Команда для того что-бы узнать баланс' },
-					{ name: 'Qshop', value: 'Команда просмотра магазина' },
-					{ name: 'Qbuy <название предмета>', value: 'Команда для покупки товара в магазине' },
-					{ name: 'Qcalm', value: 'Команда для сбора денег, за предметы из магазина' },
-					{ name: 'Qpay <пинг игрока> <сума денег>', value: 'Команда для перевода денег на другой счет, налог 5%' },
+					{ name: 'Qinfo | Йинфо <любая команда без \"q\">', value: 'Команда для подробной информации о боте' },
+					{ name: 'Qwork | Йроб', value: 'Команда для заработка в средем дает 120💵 раз в 30 секунд' },
+					{ name: 'Qact | Йдей', value: 'Команда для заработка в средем дает 220💵 раз в 1 минуту' },
+					{ name: 'Qcrime | Йкраж', value: 'Команда для заработка в средем дает 500💵 раз в 1 час' },
+					{ name: 'Qbal | йбал или Qbal | йбал <пинг игрока>', value: 'Команда для того что-бы узнать баланс' },
+					{ name: 'Qshop | Ймаг', value: 'Команда просмотра магазина' },
+					{ name: 'Qbuy | Йкуп <название предмета>', value: 'Команда для покупки товара в магазине' },
+					{ name: 'Qcalm | Йсоб', value: 'Команда для сбора денег, за предметы из магазина' },
+					{ name: 'Qpay | Йплат <пинг игрока> <сума денег>', value: 'Команда для перевода денег на другой счет, налог 5%' },
+					{ name: 'Qtop | Йтоп', value: 'Команда для вывода топ игроков сервера' },
+					{ name: 'Qcas | Йказ <число ставки>', value: 'Команда для игры в казино, разброс по возврату +-85%' },
 				)
 			msg.reply({ embeds: [helpEmbed]})
 			break;
+
 		case 'pay':
-			pay(msg)
+		case 'зфн':
+		case 'плат':
+			void pay(msg)
 			break;
+
 		case 'top':
-			top(msg)
+		case 'ещз':
+		case 'топ':
+			void top(msg)
+			break;
+
+		case 'cas':
+		case 'сфы':
+		case 'каз':
+			void cas(msg)
 			break;
 		default:
 			console.log('Error in command switch')

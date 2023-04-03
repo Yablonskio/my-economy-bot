@@ -56,7 +56,7 @@ function payWorker(msg, dataWrite, member) {
 		return
 	}
 	let walletTransNick = client.users.cache.get(walletTrans.id).tag
-	let walletTransAvatar = client.users.cache.get(walletTrans.id).avatarURL()
+	//let walletTransAvatar = client.users.cache.get(walletTrans.id).avatarURL()
 
 	let tax = Math.floor(amountTrans / 100 * 5)
 	amountTrans = amountTrans - tax

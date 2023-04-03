@@ -2,11 +2,7 @@ function addNewUser(msg, dataWrite) {
 	let newUser = {
 		id: msg.author.id,
 		money: 500,
-		cooldownW: 0,
-		cooldownA: 0,
-		cooldownC: 0,
-		hourMoney: {cooldown: 0, amount: 0},
-		dayMoney: {cooldown: 0, amount: 0}
+		cooldown: [0, 0, 0, {cooldown: 0, amount: 0}, {cooldown: 0, amount: 0}],
 	}
 	dataWrite.push(newUser)
 	msg.channel.send('Добро пожаловать! Ваш начальный баланс: 500')
