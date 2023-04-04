@@ -37,4 +37,4 @@ client.on('messageCreate', msg => {
 	Commands(cmd, msg)
 })
 
-client.login('OTQxMDM0MzE1MTg4NDM3MDUz.GI7A49.ILQE9c3Jx5VkLIY2vsIu4A0qBhnxj0objpXtSo');
+client.login(TOKEN);
