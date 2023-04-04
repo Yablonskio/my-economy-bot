@@ -12,7 +12,7 @@ function logicCmd(msg, data, type) {
 	let percentDouble = dataCmd[type].percentDouble
 	cooldown = data.cooldown[type]
 	paymentCmd = dataCmd[type].payment
-	//try {
+	try {
 		if (type === 4) {
 			cooldown = data[type].cooldown
 			paymentCmd = data[type].amount
@@ -23,7 +23,7 @@ function logicCmd(msg, data, type) {
 			cooldown = data.cooldown[type]
 			paymentCmd = dataCmd[type].payment
 		}
-	/*} catch (e) {
+	} catch (e) {
 		let workErrorEmbed = new EmbedBuilder()
 			.setColor(0xeb4034)
 			.setTitle('У вас нету стороннего заработка')
@@ -32,7 +32,7 @@ function logicCmd(msg, data, type) {
 			.setFooter({ text: msg.author.tag, iconURL: msg.author.avatarURL() })
 		msg.channel.send({ embeds: [workErrorEmbed]})
 		return
-	}*/
+	}
 	if (paymentCmd === 0) return
 	if (dateNow - cooldown >= cooldownCmd || cooldown === 0) {
 		let name = dataCmd[type].name
