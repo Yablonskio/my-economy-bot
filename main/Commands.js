@@ -1,6 +1,6 @@
-import { EmbedBuilder} from 'discord.js'
+import { EmbedBuilder } from 'discord.js'
 import callLogicCmd from '../logic/logic.js'
-import logicBuy from "../logic/logicShop.js";
+import logicBuy from '../logic/logicShop.js'
 import pay from '../commands/pay.js'
 import bal from '../commands/bal.js'
 import top from '../commands/top.js'
@@ -112,8 +112,10 @@ function Commands(command, msg) {
 		case 'каз':
 			void cas(msg)
 			break;
+
 		default:
 			console.log('Error in command switch')
 	}
 }
+
 export default Commands

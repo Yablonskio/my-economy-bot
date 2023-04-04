@@ -1,7 +1,6 @@
-import fs from "fs";
-import {addNewUser, foundAuthor} from "../main/BasicComponents.js";
-import {EmbedBuilder} from "discord.js";
-import client from "../index.js";
+import fs from 'fs'
+import { EmbedBuilder } from 'discord.js'
+import { addNewUser, foundAuthor } from '../main/BasicComponents.js'
 
 async function pay(msg) {
 	await fs.readFile('dataUser.json',
@@ -24,6 +23,7 @@ async function pay(msg) {
 		}
 	})
 }
+
 function payWorker(msg, dataWrite, member) {
 	let payErrorEmbed = new EmbedBuilder()
 		.setColor(0xeb4034)
@@ -39,9 +39,11 @@ function payWorker(msg, dataWrite, member) {
 		msg.channel.send({ embeds: [payErrorEmbed]})
 		return
 	}
+
 	let walletTransWorker = msg.content.split(' ')[1].substring(2).slice(0, -1)
 	let walletTrans = foundAuthor(walletTransWorker, dataWrite)
 	let amountTrans = msg.content.split(' ')[2]
+
 	if (walletTrans === false) {
 		payErrorEmbed.setDescription('Не удалось найти такой кошелек , возможно пользователь еще его не создал')
 		msg.channel.send({ embeds: [payErrorEmbed]})
@@ -55,10 +57,11 @@ function payWorker(msg, dataWrite, member) {
 		msg.channel.send({ embeds: [payErrorEmbed]})
 		return
 	}
+
 	let walletTransNick = client.users.cache.get(walletTrans.id).tag
 	//let walletTransAvatar = client.users.cache.get(walletTrans.id).avatarURL()
-
 	let tax = Math.floor(amountTrans / 100 * 5)
+
 	amountTrans = amountTrans - tax
 	member.money = member.money - amountTrans
 	walletTrans.money = walletTrans.money + amountTrans
@@ -70,6 +73,8 @@ function payWorker(msg, dataWrite, member) {
 		.setDescription(msg.author.tag + '(-' + amountTrans + '💵)  ⇢ ' + walletTransNick + '(+' + amountTrans + '💵)' +
 			'\n Комиссия: ' + tax + '💵 (5%)')
 		.setFooter({ text: msg.author.tag, iconURL: msg.author.avatarURL() })
+
 	msg.channel.send({ embeds: [payEmbed]})
 }
+
 export default pay

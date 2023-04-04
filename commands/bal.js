@@ -1,7 +1,6 @@
-import fs from "fs";
-import {addNewUser, foundAuthor} from "../main/BasicComponents.js";
-import {EmbedBuilder} from "discord.js";
-import client from '../index.js'
+import fs from 'fs'
+import { EmbedBuilder } from 'discord.js'
+import { addNewUser, foundAuthor } from '../main/BasicComponents.js'
 
 async function bal(msg) {
 	await fs.readFile('dataUser.json',
@@ -22,11 +21,13 @@ async function bal(msg) {
 								'\nДоп. 💵 каждый день: ' + member.cooldown[4].amount)
 							.setFooter({ text: 'Balance', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070038260316901467/okey.png' })
 							.setTimestamp()
+
 						msg.channel.send({ embeds: [balEmbed]})
 					} else {
 						try {
 							let anotherWallet = msg.content.split(' ')[1].substring(2).slice(0, -1)
 							anotherWallet = foundAuthor(anotherWallet, dataWrite)
+
 							let anotherNick = client.users.cache.get(anotherWallet.id).tag
 							let anotherAvatar = client.users.cache.get(anotherWallet.id).avatarURL()
 
@@ -38,6 +39,7 @@ async function bal(msg) {
 								'\nДоп. 💵 каждый день: ' + anotherWallet.cooldown[4].amount)
 								.setFooter({ text: 'Balance', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070038260316901467/okey.png' })
 								.setTimestamp()
+
 							msg.channel.send({ embeds: [balEmbed]})
 						} catch {
 							let balErrEmbed = new EmbedBuilder()
@@ -45,6 +47,7 @@ async function bal(msg) {
 								.setTitle('Ошибка, такого кошелька еще не существует :(')
 								.setFooter({ text: 'Balance', iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1070038260316901467/okey.png' })
 								.setTimestamp()
+
 							msg.channel.send({ embeds: [balErrEmbed]})
 						}
 					}

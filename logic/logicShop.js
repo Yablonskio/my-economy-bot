@@ -1,6 +1,5 @@
-import fs from "fs";
-import {addNewUser, foundAuthor} from "../main/BasicComponents.js";
-import guild from "../index.js";
+import fs from 'fs'
+import { addNewUser, foundAuthor } from '../main/BasicComponents.js'
 
 async function logicBuy(msg) {
 	const roleBuy = msg.content.substring(5) || 'error'
@@ -63,4 +62,5 @@ async function logicBuy(msg) {
 				(err) => err && console.error(err))
 		})
 }
+
 export default logicBuy
