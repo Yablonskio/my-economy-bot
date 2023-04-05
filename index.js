@@ -10,8 +10,6 @@ export const client = new Client({
 	]
 })
 
-const PREFIX = ['q', 'й']
-
 export const dataCommand = [
 	{name: 'Work', cooldown: 30000, payment: 100, percent: 30, percentDouble: 10},
 	{name: 'Act', cooldown: 60000, payment: 170, percent: 60, percentDouble: 30},
@@ -19,6 +17,8 @@ export const dataCommand = [
 	{name: 'Calm', cooldown: 3600000, payment: 0, percent: 0, percentDouble: 0},
 	{name: 'Calm', cooldown: 86400000, payment: 0, percent: 0, percentDouble: 0},
 ]
+
+const PREFIX = ['q', 'й']
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);

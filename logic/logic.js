@@ -1,27 +1,24 @@
-import fs from 'fs'
 import { EmbedBuilder } from 'discord.js'
 import { dataCommand as dataCmd } from '../index.js'
-import { foundAuthor, addNewUser } from '../main/BasicComponents.js'
-
 // 1 - work; 2 - act; 3 - crime; 4 - hour money; 5 - day money;
 
-function logicCmd(msg, data, type) {
+export default function logicCmd(msg, member, dataWrite, type) {
 	let dateNow = new Date().getTime()
-	let cooldown = data.cooldown[type]
+
+	let cooldown = member.cooldown[type]
+
 	let paymentCmd = dataCmd[type].payment
 	let cooldownCmd = dataCmd[type].cooldown
-	let percentCmd = dataCmd[type].percent
-	let percentDouble = dataCmd[type].percentDouble
 
 	try {
 		if (type === 4) {
-			cooldown = data[type].cooldown
-			paymentCmd = data[type].amount
+			cooldown = member[type].cooldown
+			paymentCmd = member[type].amount
 		} else if (type === 5) {
-			cooldown = data[type].cooldown
-			paymentCmd = data[type].amount
+			cooldown = member[type].cooldown
+			paymentCmd = member[type].amount
 		} else {
-			cooldown = data.cooldown[type]
+			cooldown = member.cooldown[type]
 			paymentCmd = dataCmd[type].payment
 		}
 	} catch (e) {
@@ -40,24 +37,27 @@ function logicCmd(msg, data, type) {
 
 	if (dateNow - cooldown >= cooldownCmd || cooldown === 0) {
 		let name = dataCmd[type].name
-		data.cooldown[type] = dateNow
+		let percentCmd = dataCmd[type].percent
+		let percentDouble = dataCmd[type].percentDouble
 
-		let rundomMoney =
+		member.cooldown[type] = dateNow
+
+		let randomMoney =
 			Math.floor(Math.random() * paymentCmd / 100 * percentCmd)
 
 		if (Math.ceil(Math.random() * 100/5)*5 < percentCmd &&
 		percentDouble !== 0) {
-			rundomMoney *= 2
+			randomMoney *= 2
 		}
 
-		let moneyEarn = paymentCmd + rundomMoney
-		data.money = data.money + moneyEarn
+		let moneyEarn = paymentCmd + randomMoney
+		member.money = member.money + moneyEarn
 
 		let workEmbed = new EmbedBuilder()
 			.setColor(0x66de86)
 			.setTitle('Вы заработали: +' + moneyEarn + '💸')
 			.setAuthor({ name: name, iconURL: 'https://cdn.discordapp.com/attachments/729929458064031816/1064307830510854144/plus.png'})
-			.setDescription('На балансе теперь: **' + data.money + '**💵')
+			.setDescription('На балансе теперь: **' + member.money + '**💵')
 			.setFooter({ text: msg.author.tag, iconURL: msg.author.avatarURL() })
 
 		msg.channel.send({ embeds: [workEmbed]})
@@ -85,22 +85,3 @@ function logicCmd(msg, data, type) {
 		msg.channel.send({ embeds: [restEmbed.setTitle(`Отдых, еще осталось: ${cooldownText} мин и ${cooldownSec} сек`)]})
 	}
 }
-
-async function callLogicCmd(type, msg) {
-	await fs.readFile('dataUser.json', function (err, data) {
-		let dataWrite = JSON.parse(data)
-		let member = foundAuthor(msg.author.id, dataWrite)
-		if (member === false) {
-			addNewUser(msg, dataWrite)
-		} else {
-			if (err) console.log(err)
-			else logicCmd(msg, member, type)
-		}
-		if (dataWrite !== Object) {
-			fs.writeFile('dataUser.json', JSON.stringify(dataWrite),
-				(err) => err && console.error(err))
-		} else console.log('CRITICAL ERROR!!!')
-	})
-}
-
-export default callLogicCmd
